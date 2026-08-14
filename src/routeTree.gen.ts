@@ -9,38 +9,675 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VoteMakerRouteImport } from './routes/vote-maker'
+import { Route as VerifiedRouteImport } from './routes/verified'
+import { Route as TrainingaiRouteImport } from './routes/trainingai'
+import { Route as StatusRouteImport } from './routes/status'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as RequestRouteImport } from './routes/request'
+import { Route as RegisterRouteImport } from './routes/register'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as LeaderboardRouteImport } from './routes/leaderboard'
+import { Route as GiveCreditsRouteImport } from './routes/give-credits'
+import { Route as GetVerifiedRouteImport } from './routes/get-verified'
+import { Route as FakeMeRouteImport } from './routes/fake-me'
+import { Route as BroadcastRouteImport } from './routes/broadcast'
+import { Route as AiRouteImport } from './routes/ai'
+import { Route as AddappsRouteImport } from './routes/addapps'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as VoteIdRouteImport } from './routes/vote.$id'
+import { Route as StatusSetRouteImport } from './routes/status_.set'
+import { Route as RequestDataRouteImport } from './routes/request_.data'
+import { Route as DataGetVerifiedRouteImport } from './routes/data.get-verified'
+import { Route as AppsIdRouteImport } from './routes/apps.$id'
+import { Route as ApiAiVisionRouteImport } from './routes/api.ai-vision'
+import { Route as ApiAiTitleRouteImport } from './routes/api.ai-title'
+import { Route as ApiAiSearchRouteImport } from './routes/api.ai-search'
+import { Route as ApiAiQueryRouteImport } from './routes/api.ai-query'
+import { Route as ApiAiPlanRouteImport } from './routes/api.ai-plan'
+import { Route as ApiAiChatRouteImport } from './routes/api.ai-chat'
+import { Route as AiProfileRouteImport } from './routes/ai_.profile'
+import { Route as AiCreditsRouteImport } from './routes/ai_.credits'
+import { Route as AppsIndexApplistDotjsonRouteImport } from './routes/apps.index.applist[.]json'
+import { Route as UsersIdProfileRouteImport } from './routes/users.$id.profile'
+import { Route as UPB64RouteImport } from './routes/u.p.$b64'
+import { Route as CreateAiImageIdRouteImport } from './routes/create.ai-image.$id'
+import { Route as BroadcastsImageIdRouteImport } from './routes/broadcasts.image.$id'
+import { Route as AppsPreviewIdRouteImport } from './routes/apps.preview.$id'
+import { Route as AppsGypsB64RouteImport } from './routes/apps.gyps.$b64'
+import { Route as AppsIconFGJ01IdRouteImport } from './routes/apps.icon.FGJ01.$id'
 
+const VoteMakerRoute = VoteMakerRouteImport.update({
+  id: '/vote-maker',
+  path: '/vote-maker',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifiedRoute = VerifiedRouteImport.update({
+  id: '/verified',
+  path: '/verified',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TrainingaiRoute = TrainingaiRouteImport.update({
+  id: '/trainingai',
+  path: '/trainingai',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StatusRoute = StatusRouteImport.update({
+  id: '/status',
+  path: '/status',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RequestRoute = RequestRouteImport.update({
+  id: '/request',
+  path: '/request',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegisterRoute = RegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LeaderboardRoute = LeaderboardRouteImport.update({
+  id: '/leaderboard',
+  path: '/leaderboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GiveCreditsRoute = GiveCreditsRouteImport.update({
+  id: '/give-credits',
+  path: '/give-credits',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GetVerifiedRoute = GetVerifiedRouteImport.update({
+  id: '/get-verified',
+  path: '/get-verified',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FakeMeRoute = FakeMeRouteImport.update({
+  id: '/fake-me',
+  path: '/fake-me',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BroadcastRoute = BroadcastRouteImport.update({
+  id: '/broadcast',
+  path: '/broadcast',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiRoute = AiRouteImport.update({
+  id: '/ai',
+  path: '/ai',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AddappsRoute = AddappsRouteImport.update({
+  id: '/addapps',
+  path: '/addapps',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VoteIdRoute = VoteIdRouteImport.update({
+  id: '/vote/$id',
+  path: '/vote/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StatusSetRoute = StatusSetRouteImport.update({
+  id: '/status_/set',
+  path: '/status/set',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RequestDataRoute = RequestDataRouteImport.update({
+  id: '/request_/data',
+  path: '/request/data',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DataGetVerifiedRoute = DataGetVerifiedRouteImport.update({
+  id: '/data/get-verified',
+  path: '/data/get-verified',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppsIdRoute = AppsIdRouteImport.update({
+  id: '/apps/$id',
+  path: '/apps/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAiVisionRoute = ApiAiVisionRouteImport.update({
+  id: '/api/ai-vision',
+  path: '/api/ai-vision',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAiTitleRoute = ApiAiTitleRouteImport.update({
+  id: '/api/ai-title',
+  path: '/api/ai-title',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAiSearchRoute = ApiAiSearchRouteImport.update({
+  id: '/api/ai-search',
+  path: '/api/ai-search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAiQueryRoute = ApiAiQueryRouteImport.update({
+  id: '/api/ai-query',
+  path: '/api/ai-query',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAiPlanRoute = ApiAiPlanRouteImport.update({
+  id: '/api/ai-plan',
+  path: '/api/ai-plan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAiChatRoute = ApiAiChatRouteImport.update({
+  id: '/api/ai-chat',
+  path: '/api/ai-chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiProfileRoute = AiProfileRouteImport.update({
+  id: '/ai_/profile',
+  path: '/ai/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiCreditsRoute = AiCreditsRouteImport.update({
+  id: '/ai_/credits',
+  path: '/ai/credits',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppsIndexApplistDotjsonRoute = AppsIndexApplistDotjsonRouteImport.update({
+  id: '/apps/index/applist.json',
+  path: '/apps/index/applist.json',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UsersIdProfileRoute = UsersIdProfileRouteImport.update({
+  id: '/users/$id/profile',
+  path: '/users/$id/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UPB64Route = UPB64RouteImport.update({
+  id: '/u/p/$b64',
+  path: '/u/p/$b64',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CreateAiImageIdRoute = CreateAiImageIdRouteImport.update({
+  id: '/create/ai-image/$id',
+  path: '/create/ai-image/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BroadcastsImageIdRoute = BroadcastsImageIdRouteImport.update({
+  id: '/broadcasts/image/$id',
+  path: '/broadcasts/image/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppsPreviewIdRoute = AppsPreviewIdRouteImport.update({
+  id: '/apps/preview/$id',
+  path: '/apps/preview/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppsGypsB64Route = AppsGypsB64RouteImport.update({
+  id: '/apps/gyps/$b64',
+  path: '/apps/gyps/$b64',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppsIconFGJ01IdRoute = AppsIconFGJ01IdRouteImport.update({
+  id: '/apps/icon/FGJ01/$id',
+  path: '/apps/icon/FGJ01/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/addapps': typeof AddappsRoute
+  '/ai': typeof AiRoute
+  '/broadcast': typeof BroadcastRoute
+  '/fake-me': typeof FakeMeRoute
+  '/get-verified': typeof GetVerifiedRoute
+  '/give-credits': typeof GiveCreditsRoute
+  '/leaderboard': typeof LeaderboardRoute
+  '/login': typeof LoginRoute
+  '/profile': typeof ProfileRoute
+  '/register': typeof RegisterRoute
+  '/request': typeof RequestRoute
+  '/settings': typeof SettingsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/status': typeof StatusRoute
+  '/trainingai': typeof TrainingaiRoute
+  '/verified': typeof VerifiedRoute
+  '/vote-maker': typeof VoteMakerRoute
+  '/ai/credits': typeof AiCreditsRoute
+  '/ai/profile': typeof AiProfileRoute
+  '/api/ai-chat': typeof ApiAiChatRoute
+  '/api/ai-plan': typeof ApiAiPlanRoute
+  '/api/ai-query': typeof ApiAiQueryRoute
+  '/api/ai-search': typeof ApiAiSearchRoute
+  '/api/ai-title': typeof ApiAiTitleRoute
+  '/api/ai-vision': typeof ApiAiVisionRoute
+  '/apps/$id': typeof AppsIdRoute
+  '/data/get-verified': typeof DataGetVerifiedRoute
+  '/request/data': typeof RequestDataRoute
+  '/status/set': typeof StatusSetRoute
+  '/vote/$id': typeof VoteIdRoute
+  '/apps/gyps/$b64': typeof AppsGypsB64Route
+  '/apps/preview/$id': typeof AppsPreviewIdRoute
+  '/broadcasts/image/$id': typeof BroadcastsImageIdRoute
+  '/create/ai-image/$id': typeof CreateAiImageIdRoute
+  '/u/p/$b64': typeof UPB64Route
+  '/users/$id/profile': typeof UsersIdProfileRoute
+  '/apps/index/applist.json': typeof AppsIndexApplistDotjsonRoute
+  '/apps/icon/FGJ01/$id': typeof AppsIconFGJ01IdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/addapps': typeof AddappsRoute
+  '/ai': typeof AiRoute
+  '/broadcast': typeof BroadcastRoute
+  '/fake-me': typeof FakeMeRoute
+  '/get-verified': typeof GetVerifiedRoute
+  '/give-credits': typeof GiveCreditsRoute
+  '/leaderboard': typeof LeaderboardRoute
+  '/login': typeof LoginRoute
+  '/profile': typeof ProfileRoute
+  '/register': typeof RegisterRoute
+  '/request': typeof RequestRoute
+  '/settings': typeof SettingsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/status': typeof StatusRoute
+  '/trainingai': typeof TrainingaiRoute
+  '/verified': typeof VerifiedRoute
+  '/vote-maker': typeof VoteMakerRoute
+  '/ai/credits': typeof AiCreditsRoute
+  '/ai/profile': typeof AiProfileRoute
+  '/api/ai-chat': typeof ApiAiChatRoute
+  '/api/ai-plan': typeof ApiAiPlanRoute
+  '/api/ai-query': typeof ApiAiQueryRoute
+  '/api/ai-search': typeof ApiAiSearchRoute
+  '/api/ai-title': typeof ApiAiTitleRoute
+  '/api/ai-vision': typeof ApiAiVisionRoute
+  '/apps/$id': typeof AppsIdRoute
+  '/data/get-verified': typeof DataGetVerifiedRoute
+  '/request/data': typeof RequestDataRoute
+  '/status/set': typeof StatusSetRoute
+  '/vote/$id': typeof VoteIdRoute
+  '/apps/gyps/$b64': typeof AppsGypsB64Route
+  '/apps/preview/$id': typeof AppsPreviewIdRoute
+  '/broadcasts/image/$id': typeof BroadcastsImageIdRoute
+  '/create/ai-image/$id': typeof CreateAiImageIdRoute
+  '/u/p/$b64': typeof UPB64Route
+  '/users/$id/profile': typeof UsersIdProfileRoute
+  '/apps/index/applist.json': typeof AppsIndexApplistDotjsonRoute
+  '/apps/icon/FGJ01/$id': typeof AppsIconFGJ01IdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/addapps': typeof AddappsRoute
+  '/ai': typeof AiRoute
+  '/broadcast': typeof BroadcastRoute
+  '/fake-me': typeof FakeMeRoute
+  '/get-verified': typeof GetVerifiedRoute
+  '/give-credits': typeof GiveCreditsRoute
+  '/leaderboard': typeof LeaderboardRoute
+  '/login': typeof LoginRoute
+  '/profile': typeof ProfileRoute
+  '/register': typeof RegisterRoute
+  '/request': typeof RequestRoute
+  '/settings': typeof SettingsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/status': typeof StatusRoute
+  '/trainingai': typeof TrainingaiRoute
+  '/verified': typeof VerifiedRoute
+  '/vote-maker': typeof VoteMakerRoute
+  '/ai_/credits': typeof AiCreditsRoute
+  '/ai_/profile': typeof AiProfileRoute
+  '/api/ai-chat': typeof ApiAiChatRoute
+  '/api/ai-plan': typeof ApiAiPlanRoute
+  '/api/ai-query': typeof ApiAiQueryRoute
+  '/api/ai-search': typeof ApiAiSearchRoute
+  '/api/ai-title': typeof ApiAiTitleRoute
+  '/api/ai-vision': typeof ApiAiVisionRoute
+  '/apps/$id': typeof AppsIdRoute
+  '/data/get-verified': typeof DataGetVerifiedRoute
+  '/request_/data': typeof RequestDataRoute
+  '/status_/set': typeof StatusSetRoute
+  '/vote/$id': typeof VoteIdRoute
+  '/apps/gyps/$b64': typeof AppsGypsB64Route
+  '/apps/preview/$id': typeof AppsPreviewIdRoute
+  '/broadcasts/image/$id': typeof BroadcastsImageIdRoute
+  '/create/ai-image/$id': typeof CreateAiImageIdRoute
+  '/u/p/$b64': typeof UPB64Route
+  '/users/$id/profile': typeof UsersIdProfileRoute
+  '/apps/index/applist.json': typeof AppsIndexApplistDotjsonRoute
+  '/apps/icon/FGJ01/$id': typeof AppsIconFGJ01IdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/addapps'
+    | '/ai'
+    | '/broadcast'
+    | '/fake-me'
+    | '/get-verified'
+    | '/give-credits'
+    | '/leaderboard'
+    | '/login'
+    | '/profile'
+    | '/register'
+    | '/request'
+    | '/settings'
+    | '/sitemap.xml'
+    | '/status'
+    | '/trainingai'
+    | '/verified'
+    | '/vote-maker'
+    | '/ai/credits'
+    | '/ai/profile'
+    | '/api/ai-chat'
+    | '/api/ai-plan'
+    | '/api/ai-query'
+    | '/api/ai-search'
+    | '/api/ai-title'
+    | '/api/ai-vision'
+    | '/apps/$id'
+    | '/data/get-verified'
+    | '/request/data'
+    | '/status/set'
+    | '/vote/$id'
+    | '/apps/gyps/$b64'
+    | '/apps/preview/$id'
+    | '/broadcasts/image/$id'
+    | '/create/ai-image/$id'
+    | '/u/p/$b64'
+    | '/users/$id/profile'
+    | '/apps/index/applist.json'
+    | '/apps/icon/FGJ01/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/addapps'
+    | '/ai'
+    | '/broadcast'
+    | '/fake-me'
+    | '/get-verified'
+    | '/give-credits'
+    | '/leaderboard'
+    | '/login'
+    | '/profile'
+    | '/register'
+    | '/request'
+    | '/settings'
+    | '/sitemap.xml'
+    | '/status'
+    | '/trainingai'
+    | '/verified'
+    | '/vote-maker'
+    | '/ai/credits'
+    | '/ai/profile'
+    | '/api/ai-chat'
+    | '/api/ai-plan'
+    | '/api/ai-query'
+    | '/api/ai-search'
+    | '/api/ai-title'
+    | '/api/ai-vision'
+    | '/apps/$id'
+    | '/data/get-verified'
+    | '/request/data'
+    | '/status/set'
+    | '/vote/$id'
+    | '/apps/gyps/$b64'
+    | '/apps/preview/$id'
+    | '/broadcasts/image/$id'
+    | '/create/ai-image/$id'
+    | '/u/p/$b64'
+    | '/users/$id/profile'
+    | '/apps/index/applist.json'
+    | '/apps/icon/FGJ01/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/addapps'
+    | '/ai'
+    | '/broadcast'
+    | '/fake-me'
+    | '/get-verified'
+    | '/give-credits'
+    | '/leaderboard'
+    | '/login'
+    | '/profile'
+    | '/register'
+    | '/request'
+    | '/settings'
+    | '/sitemap.xml'
+    | '/status'
+    | '/trainingai'
+    | '/verified'
+    | '/vote-maker'
+    | '/ai_/credits'
+    | '/ai_/profile'
+    | '/api/ai-chat'
+    | '/api/ai-plan'
+    | '/api/ai-query'
+    | '/api/ai-search'
+    | '/api/ai-title'
+    | '/api/ai-vision'
+    | '/apps/$id'
+    | '/data/get-verified'
+    | '/request_/data'
+    | '/status_/set'
+    | '/vote/$id'
+    | '/apps/gyps/$b64'
+    | '/apps/preview/$id'
+    | '/broadcasts/image/$id'
+    | '/create/ai-image/$id'
+    | '/u/p/$b64'
+    | '/users/$id/profile'
+    | '/apps/index/applist.json'
+    | '/apps/icon/FGJ01/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  AddappsRoute: typeof AddappsRoute
+  AiRoute: typeof AiRoute
+  BroadcastRoute: typeof BroadcastRoute
+  FakeMeRoute: typeof FakeMeRoute
+  GetVerifiedRoute: typeof GetVerifiedRoute
+  GiveCreditsRoute: typeof GiveCreditsRoute
+  LeaderboardRoute: typeof LeaderboardRoute
+  LoginRoute: typeof LoginRoute
+  ProfileRoute: typeof ProfileRoute
+  RegisterRoute: typeof RegisterRoute
+  RequestRoute: typeof RequestRoute
+  SettingsRoute: typeof SettingsRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  StatusRoute: typeof StatusRoute
+  TrainingaiRoute: typeof TrainingaiRoute
+  VerifiedRoute: typeof VerifiedRoute
+  VoteMakerRoute: typeof VoteMakerRoute
+  AiCreditsRoute: typeof AiCreditsRoute
+  AiProfileRoute: typeof AiProfileRoute
+  ApiAiChatRoute: typeof ApiAiChatRoute
+  ApiAiPlanRoute: typeof ApiAiPlanRoute
+  ApiAiQueryRoute: typeof ApiAiQueryRoute
+  ApiAiSearchRoute: typeof ApiAiSearchRoute
+  ApiAiTitleRoute: typeof ApiAiTitleRoute
+  ApiAiVisionRoute: typeof ApiAiVisionRoute
+  AppsIdRoute: typeof AppsIdRoute
+  DataGetVerifiedRoute: typeof DataGetVerifiedRoute
+  RequestDataRoute: typeof RequestDataRoute
+  StatusSetRoute: typeof StatusSetRoute
+  VoteIdRoute: typeof VoteIdRoute
+  AppsGypsB64Route: typeof AppsGypsB64Route
+  AppsPreviewIdRoute: typeof AppsPreviewIdRoute
+  BroadcastsImageIdRoute: typeof BroadcastsImageIdRoute
+  CreateAiImageIdRoute: typeof CreateAiImageIdRoute
+  UPB64Route: typeof UPB64Route
+  UsersIdProfileRoute: typeof UsersIdProfileRoute
+  AppsIndexApplistDotjsonRoute: typeof AppsIndexApplistDotjsonRoute
+  AppsIconFGJ01IdRoute: typeof AppsIconFGJ01IdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/vote-maker': {
+      id: '/vote-maker'
+      path: '/vote-maker'
+      fullPath: '/vote-maker'
+      preLoaderRoute: typeof VoteMakerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verified': {
+      id: '/verified'
+      path: '/verified'
+      fullPath: '/verified'
+      preLoaderRoute: typeof VerifiedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/trainingai': {
+      id: '/trainingai'
+      path: '/trainingai'
+      fullPath: '/trainingai'
+      preLoaderRoute: typeof TrainingaiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/status': {
+      id: '/status'
+      path: '/status'
+      fullPath: '/status'
+      preLoaderRoute: typeof StatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/request': {
+      id: '/request'
+      path: '/request'
+      fullPath: '/request'
+      preLoaderRoute: typeof RequestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/leaderboard': {
+      id: '/leaderboard'
+      path: '/leaderboard'
+      fullPath: '/leaderboard'
+      preLoaderRoute: typeof LeaderboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/give-credits': {
+      id: '/give-credits'
+      path: '/give-credits'
+      fullPath: '/give-credits'
+      preLoaderRoute: typeof GiveCreditsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/get-verified': {
+      id: '/get-verified'
+      path: '/get-verified'
+      fullPath: '/get-verified'
+      preLoaderRoute: typeof GetVerifiedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fake-me': {
+      id: '/fake-me'
+      path: '/fake-me'
+      fullPath: '/fake-me'
+      preLoaderRoute: typeof FakeMeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/broadcast': {
+      id: '/broadcast'
+      path: '/broadcast'
+      fullPath: '/broadcast'
+      preLoaderRoute: typeof BroadcastRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai': {
+      id: '/ai'
+      path: '/ai'
+      fullPath: '/ai'
+      preLoaderRoute: typeof AiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/addapps': {
+      id: '/addapps'
+      path: '/addapps'
+      fullPath: '/addapps'
+      preLoaderRoute: typeof AddappsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +685,197 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/vote/$id': {
+      id: '/vote/$id'
+      path: '/vote/$id'
+      fullPath: '/vote/$id'
+      preLoaderRoute: typeof VoteIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/status_/set': {
+      id: '/status_/set'
+      path: '/status/set'
+      fullPath: '/status/set'
+      preLoaderRoute: typeof StatusSetRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/request_/data': {
+      id: '/request_/data'
+      path: '/request/data'
+      fullPath: '/request/data'
+      preLoaderRoute: typeof RequestDataRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/data/get-verified': {
+      id: '/data/get-verified'
+      path: '/data/get-verified'
+      fullPath: '/data/get-verified'
+      preLoaderRoute: typeof DataGetVerifiedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/apps/$id': {
+      id: '/apps/$id'
+      path: '/apps/$id'
+      fullPath: '/apps/$id'
+      preLoaderRoute: typeof AppsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/ai-vision': {
+      id: '/api/ai-vision'
+      path: '/api/ai-vision'
+      fullPath: '/api/ai-vision'
+      preLoaderRoute: typeof ApiAiVisionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/ai-title': {
+      id: '/api/ai-title'
+      path: '/api/ai-title'
+      fullPath: '/api/ai-title'
+      preLoaderRoute: typeof ApiAiTitleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/ai-search': {
+      id: '/api/ai-search'
+      path: '/api/ai-search'
+      fullPath: '/api/ai-search'
+      preLoaderRoute: typeof ApiAiSearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/ai-query': {
+      id: '/api/ai-query'
+      path: '/api/ai-query'
+      fullPath: '/api/ai-query'
+      preLoaderRoute: typeof ApiAiQueryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/ai-plan': {
+      id: '/api/ai-plan'
+      path: '/api/ai-plan'
+      fullPath: '/api/ai-plan'
+      preLoaderRoute: typeof ApiAiPlanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/ai-chat': {
+      id: '/api/ai-chat'
+      path: '/api/ai-chat'
+      fullPath: '/api/ai-chat'
+      preLoaderRoute: typeof ApiAiChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai_/profile': {
+      id: '/ai_/profile'
+      path: '/ai/profile'
+      fullPath: '/ai/profile'
+      preLoaderRoute: typeof AiProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai_/credits': {
+      id: '/ai_/credits'
+      path: '/ai/credits'
+      fullPath: '/ai/credits'
+      preLoaderRoute: typeof AiCreditsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/apps/index/applist.json': {
+      id: '/apps/index/applist.json'
+      path: '/apps/index/applist.json'
+      fullPath: '/apps/index/applist.json'
+      preLoaderRoute: typeof AppsIndexApplistDotjsonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/users/$id/profile': {
+      id: '/users/$id/profile'
+      path: '/users/$id/profile'
+      fullPath: '/users/$id/profile'
+      preLoaderRoute: typeof UsersIdProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/u/p/$b64': {
+      id: '/u/p/$b64'
+      path: '/u/p/$b64'
+      fullPath: '/u/p/$b64'
+      preLoaderRoute: typeof UPB64RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/create/ai-image/$id': {
+      id: '/create/ai-image/$id'
+      path: '/create/ai-image/$id'
+      fullPath: '/create/ai-image/$id'
+      preLoaderRoute: typeof CreateAiImageIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/broadcasts/image/$id': {
+      id: '/broadcasts/image/$id'
+      path: '/broadcasts/image/$id'
+      fullPath: '/broadcasts/image/$id'
+      preLoaderRoute: typeof BroadcastsImageIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/apps/preview/$id': {
+      id: '/apps/preview/$id'
+      path: '/apps/preview/$id'
+      fullPath: '/apps/preview/$id'
+      preLoaderRoute: typeof AppsPreviewIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/apps/gyps/$b64': {
+      id: '/apps/gyps/$b64'
+      path: '/apps/gyps/$b64'
+      fullPath: '/apps/gyps/$b64'
+      preLoaderRoute: typeof AppsGypsB64RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/apps/icon/FGJ01/$id': {
+      id: '/apps/icon/FGJ01/$id'
+      path: '/apps/icon/FGJ01/$id'
+      fullPath: '/apps/icon/FGJ01/$id'
+      preLoaderRoute: typeof AppsIconFGJ01IdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  AddappsRoute: AddappsRoute,
+  AiRoute: AiRoute,
+  BroadcastRoute: BroadcastRoute,
+  FakeMeRoute: FakeMeRoute,
+  GetVerifiedRoute: GetVerifiedRoute,
+  GiveCreditsRoute: GiveCreditsRoute,
+  LeaderboardRoute: LeaderboardRoute,
+  LoginRoute: LoginRoute,
+  ProfileRoute: ProfileRoute,
+  RegisterRoute: RegisterRoute,
+  RequestRoute: RequestRoute,
+  SettingsRoute: SettingsRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  StatusRoute: StatusRoute,
+  TrainingaiRoute: TrainingaiRoute,
+  VerifiedRoute: VerifiedRoute,
+  VoteMakerRoute: VoteMakerRoute,
+  AiCreditsRoute: AiCreditsRoute,
+  AiProfileRoute: AiProfileRoute,
+  ApiAiChatRoute: ApiAiChatRoute,
+  ApiAiPlanRoute: ApiAiPlanRoute,
+  ApiAiQueryRoute: ApiAiQueryRoute,
+  ApiAiSearchRoute: ApiAiSearchRoute,
+  ApiAiTitleRoute: ApiAiTitleRoute,
+  ApiAiVisionRoute: ApiAiVisionRoute,
+  AppsIdRoute: AppsIdRoute,
+  DataGetVerifiedRoute: DataGetVerifiedRoute,
+  RequestDataRoute: RequestDataRoute,
+  StatusSetRoute: StatusSetRoute,
+  VoteIdRoute: VoteIdRoute,
+  AppsGypsB64Route: AppsGypsB64Route,
+  AppsPreviewIdRoute: AppsPreviewIdRoute,
+  BroadcastsImageIdRoute: BroadcastsImageIdRoute,
+  CreateAiImageIdRoute: CreateAiImageIdRoute,
+  UPB64Route: UPB64Route,
+  UsersIdProfileRoute: UsersIdProfileRoute,
+  AppsIndexApplistDotjsonRoute: AppsIndexApplistDotjsonRoute,
+  AppsIconFGJ01IdRoute: AppsIconFGJ01IdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
