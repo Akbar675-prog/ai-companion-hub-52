@@ -70,7 +70,7 @@ function AiChatPage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [input, setInput] = useState("");
   const [image, setImage] = useState<string | null>(null);
-  const [document, setDocument] = useState<{ name: string; text: string } | null>(null);
+  const [attachedDocument, setAttachedDocument] = useState<{ name: string; text: string } | null>(null);
   const [tool, setTool] = useState<string | null>(null);
   const [plugin, setPlugin] = useState<AiPluginId | null>(null);
   const [imaging, setImaging] = useState(false);
@@ -146,7 +146,7 @@ function AiChatPage() {
     setError(null);
     setInput("");
     setImage(null);
-    setDocument(null);
+    setAttachedDocument(null);
   }
 
   function stop() {
@@ -608,15 +608,15 @@ function AiChatPage() {
     }
 
     const attached = image;
-    const documentContext = document
-      ? `\n\n[Lampiran dokumen: ${document.name}]\n${document.text}`
+    const documentContext = attachedDocument
+      ? `\n\n[Lampiran dokumen: ${attachedDocument.name}]\n${attachedDocument.text}`
       : "";
     const userMsg: ChatMessage = {
       role: "user",
       content: `${trimmed || "Tolong analisis lampiran ini."}${documentContext}`,
       ...(attached ? { image: attached } : {}),
     };
-    setDocument(null);
+    setAttachedDocument(null);
     await run([...messages, userMsg], attached, activeId, threads);
   }
 
@@ -753,8 +753,8 @@ function AiChatPage() {
             isLoading={loading || imaging}
             image={image}
             onImageChange={setImage}
-            document={document}
-            onDocumentChange={setDocument}
+            document={attachedDocument}
+            onDocumentChange={setAttachedDocument}
             onToolChange={setTool}
             plugin={plugin}
             onPluginChange={setPlugin}

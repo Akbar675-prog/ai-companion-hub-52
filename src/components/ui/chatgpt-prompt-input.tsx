@@ -202,6 +202,8 @@ export interface PromptBoxProps extends React.TextareaHTMLAttributes<HTMLTextAre
   /** Optional controlled image (data URL) so the parent can send it with the message. */
   image?: string | null;
   onImageChange?: (dataUrl: string | null) => void;
+  document?: { name: string; text: string } | null;
+  onDocumentChange?: (document: { name: string; text: string } | null) => void;
   /** Notifies the parent which tool the user picked (searchWeb | writeCode | thinkLonger). */
   onToolChange?: (toolId: string | null) => void;
   /** Called when the user aborts a streaming response. */
@@ -222,6 +224,8 @@ export const PromptBox = React.forwardRef<HTMLTextAreaElement, PromptBoxProps>(
       onChange,
       image,
       onImageChange,
+      document,
+      onDocumentChange,
       onToolChange,
       onStop,
       plugin,
@@ -288,6 +292,17 @@ export const PromptBox = React.forwardRef<HTMLTextAreaElement, PromptBoxProps>(
         const reader = new FileReader();
         reader.onloadend = () => setImagePreview(reader.result as string);
         reader.readAsDataURL(file);
+      } else if (file) {
+        if (file.size > 8_000_000) {
+          event.target.value = "";
+          return;
+        }
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const text = typeof reader.result === "string" ? reader.result.slice(0, 4_000_000) : "";
+          onDocumentChange?.({ name: file.name, text });
+        };
+        reader.readAsText(file);
       }
       event.target.value = "";
     }
@@ -298,7 +313,7 @@ export const PromptBox = React.forwardRef<HTMLTextAreaElement, PromptBoxProps>(
       if (fileInputRef.current) fileInputRef.current.value = "";
     }
 
-    const hasValue = value.trim().length > 0 || !!imagePreview;
+    const hasValue = value.trim().length > 0 || !!imagePreview || !!document;
     const activeTool = selectedTool ? toolsList.find((t) => t.id === selectedTool) : null;
     const ActiveToolIcon = activeTool?.icon;
 
@@ -341,7 +356,7 @@ export const PromptBox = React.forwardRef<HTMLTextAreaElement, PromptBoxProps>(
           ref={fileInputRef}
           onChange={handleFileChange}
           className="hidden"
-          accept="image/*"
+          accept="image/*,.txt,.md,.csv,.json,.xml,.html,.css,.js,.ts,.tsx,.jsx,.py,.java,.c,.cpp,.sql,.log"
         />
 
 
@@ -372,6 +387,15 @@ export const PromptBox = React.forwardRef<HTMLTextAreaElement, PromptBoxProps>(
               />
             </DialogContent>
           </Dialog>
+        )}
+
+        {document && (
+          <div className="mx-1 mb-1 flex items-center justify-between rounded-2xl bg-surface-variant px-3 py-2 text-sm">
+            <span className="min-w-0 truncate">{document.name}</span>
+            <button type="button" onClick={() => onDocumentChange?.(null)} aria-label="Hapus dokumen" className="ml-2 rounded-full p-1 hover:bg-accent">
+              <XIcon className="size-4" />
+            </button>
+          </div>
         )}
 
         {activePlugin && (
@@ -410,11 +434,11 @@ export const PromptBox = React.forwardRef<HTMLTextAreaElement, PromptBoxProps>(
                     className="flex h-8 w-8 items-center justify-center rounded-full text-foreground transition-colors hover:bg-accent"
                   >
                     <PlusIcon className="h-6 w-6" />
-                    <span className="sr-only">Lampirkan gambar</span>
+                    <span className="sr-only">Lampirkan file</span>
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="top" showArrow>
-                  <p>Lampirkan gambar</p>
+                  <p>Lampirkan gambar atau dokumen teks</p>
                 </TooltipContent>
               </Tooltip>
 
