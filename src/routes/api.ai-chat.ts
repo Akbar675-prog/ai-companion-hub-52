@@ -1,0 +1,230 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { getAiExtraContext } from "@/lib/ai-context.server";
+
+const CHAT_MODEL = "deepseek/deepseek-v4-flash";
+const REASONING_MODEL = "deepseek/deepseek-v4-pro";
+// Batas keras total (jawaban panjang butuh waktu) + batas diam antar chunk.
+const ANSWER_TIMEOUT_MS = 280_000;
+const IDLE_TIMEOUT_MS = 45_000;
+
+
+
+type Body = {
+  messages?: { role?: string; content?: string }[];
+  userName?: string;
+  aiProfile?: {
+    nickname?: string;
+    fullName?: string;
+    age?: number | null;
+    about?: string;
+  } | null;
+  reasoning?: boolean;
+  vision?: string;
+  search?: {
+    query?: string;
+    direct?: string;
+    results?: { title?: string; link?: string; snippet?: string }[];
+  };
+};
+
+export const Route = createFileRoute("/api/ai-chat")({
+  server: {
+    handlers: {
+      POST: async ({ request }) => {
+        const key = process.env["OPENROUTER_API_KEY"];
+        if (!key) {
+          return Response.json({ error: "OPENROUTER_API_KEY belum diatur." }, { status: 500 });
+        }
+
+        let body: Body;
+        try {
+          body = (await request.json()) as Body;
+        } catch {
+          return Response.json({ error: "Body tidak valid." }, { status: 400 });
+        }
+
+        const messages = (body.messages ?? [])
+          .slice(-30)
+          .map((m) => ({
+            role: m.role === "assistant" ? "assistant" : "user",
+            content: String(m.content ?? "").slice(0, 8000),
+          }))
+          .filter((m) => m.content.length > 0);
+
+        if (messages.length === 0) {
+          return Response.json({ error: "Pesan tidak boleh kosong." }, { status: 400 });
+        }
+
+        const userName = String(body.userName ?? "").slice(0, 60);
+
+        // Profil GetrixAI yang diisi pengguna di /ai/profile.
+        const ap = body.aiProfile;
+        let profileBlock = "";
+        if (ap) {
+          const bits: string[] = [];
+          if (ap.nickname) bits.push(`Nama panggilan: ${String(ap.nickname).slice(0, 40)}`);
+          if (ap.fullName) bits.push(`Nama lengkap: ${String(ap.fullName).slice(0, 80)}`);
+          if (typeof ap.age === "number" && ap.age > 0) bits.push(`Umur: ${Math.round(ap.age)} tahun`);
+          if (ap.about) bits.push(`Tentang dia: ${String(ap.about).slice(0, 600)}`);
+          if (bits.length > 0) {
+            profileBlock =
+              "\n\nPROFIL PENGGUNA (diisi sendiri oleh pengguna, pakai untuk personalisasi jawaban dan sapaan):\n" +
+              bits.join("\n");
+          }
+        }
+
+        let extra = "";
+        const s = body.search;
+        if (s?.results?.length || s?.direct) {
+          const lines = (s.results ?? [])
+            .slice(0, 50)
+            .map((r, i) => `[${i + 1}] ${r.title} (${r.link})\n${String(r.snippet ?? "").slice(0, 300)}`)
+            .join("\n");
+          extra +=
+            `\n\nHasil pencarian web real-time untuk "${s.query ?? ""}" (${new Date().toISOString().slice(0, 10)}):\n` +
+            (s.direct ? `Jawaban langsung: ${s.direct}\n` : "") +
+            lines +
+            "\nGunakan data ini sebagai sumber kebenaran terbaru dan paling update. Abaikan pengetahuan lamamu bila bertentangan.";
+        }
+        const vision = String(body.vision ?? "").slice(0, 4000);
+        if (vision) {
+          extra +=
+            "\n\nDeskripsi gambar yang dikirim pengguna (hasil analisis visual):\n" +
+            vision +
+            "\nJawab berdasarkan deskripsi ini dan hasil pencarian web di atas (bila ada).";
+        }
+
+        // Waktu nyata (WIB) supaya AI tahu tanggal & jam sekarang.
+        const now = new Date();
+        const nowLabel = new Intl.DateTimeFormat("id-ID", {
+          dateStyle: "full",
+          timeStyle: "short",
+          timeZone: "Asia/Jakarta",
+        }).format(now);
+        extra +=
+          `\n\nWaktu sekarang: ${nowLabel} WIB (UTC: ${now.toISOString()}). ` +
+          "Gunakan ini bila pengguna bertanya tanggal, hari, jam, umur, atau hal yang bergantung waktu.";
+
+        // Instruksi admin + katalog aplikasi (dibatasi waktu, tidak boleh menahan jawaban).
+        extra += await getAiExtraContext();
+
+        // Batas waktu keras: kalau upstream diam, jangan tunggu selamanya.
+        const upstreamAbort = new AbortController();
+        const hardStop = setTimeout(() => upstreamAbort.abort(), ANSWER_TIMEOUT_MS);
+        request.signal.addEventListener("abort", () => upstreamAbort.abort());
+
+        let upstream: Response;
+        try {
+          upstream = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
+            signal: upstreamAbort.signal,
+            body: JSON.stringify({
+              model: body.reasoning ? REASONING_MODEL : CHAT_MODEL,
+              stream: true,
+              max_tokens: body.reasoning ? 6000 : 4000,
+              messages: [
+                {
+                  role: "system",
+                  content:
+                    "Kamu adalah GetrixAI, asisten ramah di situs Galileo Mod APK. Jawab jelas, akurat, ringkas, dan pakai bahasa yang sama dengan pengguna (default Bahasa Indonesia). Gunakan markdown bila membantu, tanpa baris kosong berlebihan. Untuk perbandingan data, pakai tabel markdown GFM yang valid: setiap baris tabel WAJIB berada di barisnya sendiri (diakhiri newline), diawali dan diakhiri karakter |, dan baris pemisah header seperti |---|---| hanya sekali tepat di bawah header. Jangan menulis tabel dalam satu baris panjang. Isi sel harus singkat. Bila ada hasil pencarian web di bawah, sisipkan rujukan bernomor persis seperti [1] atau [2] di dalam kalimat yang memakai informasi itu (jangan pakai format rujukan lain)." +
+
+                    (userName
+                      ? ` Nama pengguna yang sedang mengobrol denganmu adalah ${userName}; sapa dia dengan namanya bila terasa natural.`
+                      : "") +
+                    profileBlock +
+                    extra,
+                },
+                ...messages,
+              ],
+            }),
+          });
+        } catch {
+          clearTimeout(hardStop);
+          return Response.json({ error: "AI tidak merespons, coba lagi." }, { status: 504 });
+        }
+
+        if (!upstream.ok || !upstream.body) {
+          clearTimeout(hardStop);
+          const text = await upstream.text().catch(() => "");
+          return Response.json(
+            { error: `AI error (${upstream.status}): ${text.slice(0, 200)}` },
+            { status: 502 },
+          );
+        }
+
+        const encoder = new TextEncoder();
+        const decoder = new TextDecoder();
+        const reader = upstream.body.getReader();
+
+        const stream = new ReadableStream<Uint8Array>({
+          async start(controller) {
+            const send = (obj: unknown) =>
+              controller.enqueue(encoder.encode(`data: ${JSON.stringify(obj)}\n\n`));
+            let buffer = "";
+            // Putus hanya kalau upstream benar-benar diam, bukan karena
+            // jawabannya panjang.
+            let idle: ReturnType<typeof setTimeout> | undefined;
+            const bumpIdle = () => {
+              if (idle) clearTimeout(idle);
+              idle = setTimeout(() => upstreamAbort.abort(), IDLE_TIMEOUT_MS);
+            };
+            bumpIdle();
+            try {
+              for (;;) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                bumpIdle();
+                buffer += decoder.decode(value, { stream: true });
+                const lines = buffer.split("\n");
+                buffer = lines.pop() ?? "";
+                for (const line of lines) {
+                  const trimmed = line.trim();
+                  if (!trimmed.startsWith("data:")) continue;
+                  const payload = trimmed.slice(5).trim();
+                  if (!payload || payload === "[DONE]") continue;
+                  try {
+                    const json = JSON.parse(payload) as {
+                      choices?: { delta?: { content?: string; reasoning?: string } }[];
+                    };
+                    const delta = json.choices?.[0]?.delta;
+                    if (delta?.reasoning) send({ type: "reasoning", v: delta.reasoning });
+                    if (delta?.content) send({ type: "text", v: delta.content });
+                  } catch {
+                    /* skip malformed chunk */
+                  }
+                }
+              }
+            } catch {
+              /* stream terputus / timeout: tutup dengan sopan */
+            } finally {
+              if (idle) clearTimeout(idle);
+              clearTimeout(hardStop);
+
+              try {
+                send({ type: "done" });
+                controller.close();
+              } catch {
+                /* already closed */
+              }
+            }
+          },
+          cancel() {
+            clearTimeout(hardStop);
+            upstreamAbort.abort();
+            void reader.cancel().catch(() => {});
+          },
+        });
+
+
+        return new Response(stream, {
+          headers: {
+            "Content-Type": "text/event-stream; charset=utf-8",
+            "Cache-Control": "no-cache, no-transform",
+            Connection: "keep-alive",
+          },
+        });
+      },
+    },
+  },
+});

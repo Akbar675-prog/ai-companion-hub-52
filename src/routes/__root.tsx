@@ -11,6 +11,10 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { NotificationBridge } from "../components/NotificationBridge";
+import { applySettings, loadSettings } from "../lib/settings";
+import { I18nProvider } from "../lib/i18n";
+
 
 function NotFoundComponent() {
   return (
@@ -77,21 +81,54 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Mod APK Download - Galileo Mod APK | GMA" },
+      {
+        name: "description",
+        content:
+          "Download Galileo Mod APK dan berbagai Mod APK terbaru di GMA. Aplikasi Android mod dengan fitur premium gratis. Keamanan terjamin, update berkala.",
+      },
+      {
+        name: "keywords",
+        content: "Mod APK Download, Galileo Mod APK, GMA, mod apk gratis, mod apk terbaru, aplikasi android mod",
+      },
+      { property: "og:title", content: "Mod APK Download - Galileo Mod APK | GMA" },
+      {
+        property: "og:description",
+        content: "Download Mod APK terbaik di GMA dengan keamanan terjamin dan update berkala.",
+      },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://galileomodapk.visora.my.id" },
+      { property: "og:image", content: "https://galileomodapk.visora.my.id/banner-gma.png" },
+      { property: "og:image:width", content: "1847" },
+      { property: "og:image:height", content: "1080" },
+      { property: "og:image:type", content: "image/png" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Mod APK Download - Galileo Mod APK | GMA" },
+      {
+        name: "twitter:description",
+        content: "Download Galileo Mod APK dan berbagai Mod APK terbaru di GMA.",
+      },
+      { name: "twitter:image", content: "https://galileomodapk.visora.my.id/banner-gma.png" },
+      { name: "theme-color", content: "#7bb31a" },
+      { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" },
+      { httpEquiv: "x-ua-compatible", content: "IE=edge" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
     ],
     links: [
+      { rel: "stylesheet", href: appCss },
+      { rel: "icon", href: "/favicon.png", type: "image/png" },
+      { rel: "canonical", href: "https://galileomodapk.visora.my.id" },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      {
+        rel: "preconnect",
+        href: "https://fonts.gstatic.com",
+        crossOrigin: "anonymous",
+      },
       {
         rel: "stylesheet",
-        href: appCss,
+        href: "https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wdth,wght@8..144,25..151,300..900&family=Roboto+Serif:opsz,wght@8..144,400..800&display=swap",
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
   }),
   shellComponent: RootShell,
@@ -102,11 +139,39 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="id">
       <head>
         <HeadContent />
+        {/* JSON-LD Schema untuk SEO */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "GMA - Mod APK Download",
+            "description": "Download Galileo Mod APK dan aplikasi Android mod terbaik dengan keamanan terjamin",
+            "url": "https://galileomodapk.visora.my.id",
+            "image": "https://galileomodapk.visora.my.id/banner-gma.png",
+            "applicationCategory": "Utilities",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": "4.8",
+              "ratingCount": "2500"
+            }
+          })}
+        </script>
       </head>
       <body>
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{var s=JSON.parse(localStorage.getItem('galileo:settings:v1')||'{}');var t=s.theme||'light';var d=t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d){document.documentElement.classList.add('dark');document.documentElement.style.colorScheme='dark';}}catch(e){}",
+          }}
+        />
         {children}
         <Scripts />
       </body>
@@ -117,10 +182,17 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
+  useEffect(() => {
+    applySettings(loadSettings());
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <I18nProvider>
+        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+        <Outlet />
+        <NotificationBridge />
+      </I18nProvider>
     </QueryClientProvider>
   );
 }
