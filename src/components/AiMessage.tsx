@@ -299,6 +299,7 @@ function MarkdownBody({
 /** Gambar hasil AI + tombol unduh (nama file = id gambar). */
 function GeneratedImage({ url, prompt }: { url: string; prompt?: string }) {
   const [busy, setBusy] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   async function download() {
     setBusy(true);
@@ -324,11 +325,17 @@ function GeneratedImage({ url, prompt }: { url: string; prompt?: string }) {
   }
 
   return (
-    <div className="relative w-full max-w-[320px]">
+    <div className="relative aspect-square w-full max-w-[320px] overflow-hidden rounded-[28px] bg-surface-variant">
+      {!loaded && (
+        <div className="absolute inset-0 flex items-center justify-center" aria-label="Memuat gambar">
+          <Loader2 className="size-7 animate-spin text-muted-foreground" />
+        </div>
+      )}
       <img
         src={url}
         alt={prompt || "Gambar hasil AI"}
-        className="w-full rounded-[28px] bg-surface-variant object-cover"
+        onLoad={() => setLoaded(true)}
+        className={`h-full w-full object-cover transition-opacity duration-300 ${loaded ? "opacity-100" : "opacity-0"}`}
         loading="lazy"
       />
       <button
@@ -336,7 +343,7 @@ function GeneratedImage({ url, prompt }: { url: string; prompt?: string }) {
         onClick={() => void download()}
         disabled={busy}
         aria-label="Unduh gambar"
-        className="absolute bottom-3 right-3 inline-flex size-10 items-center justify-center rounded-full bg-black/55 text-white backdrop-blur-sm transition hover:bg-black/70 active:scale-95 disabled:opacity-60"
+        className={`absolute bottom-3 right-3 inline-flex size-10 items-center justify-center rounded-full bg-foreground/70 text-background backdrop-blur-sm transition hover:bg-foreground/85 active:scale-95 disabled:opacity-60 ${loaded ? "opacity-100" : "pointer-events-none opacity-0"}`}
       >
         {busy ? <Loader2 className="size-5 animate-spin" /> : <Download className="size-5" />}
       </button>

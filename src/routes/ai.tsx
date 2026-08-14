@@ -70,6 +70,7 @@ function AiChatPage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [input, setInput] = useState("");
   const [image, setImage] = useState<string | null>(null);
+  const [document, setDocument] = useState<{ name: string; text: string } | null>(null);
   const [tool, setTool] = useState<string | null>(null);
   const [plugin, setPlugin] = useState<AiPluginId | null>(null);
   const [imaging, setImaging] = useState(false);
@@ -145,6 +146,7 @@ function AiChatPage() {
     setError(null);
     setInput("");
     setImage(null);
+    setDocument(null);
   }
 
   function stop() {
@@ -299,6 +301,34 @@ function AiChatPage() {
         if (queries.length === 0 && query) queries = [query];
       }
 
+      // Judul dan query dibuat oleh dua AI spesialis terpisah agar planner
+      // tidak mengorbankan ejaan atau kualitas query saat mengerjakan semuanya sekaligus.
+      const titlePromise = fetch("/api/ai-title", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: lastUser }),
+        signal: stepSignal(15_000),
+      })
+        .then((response) => (response.ok ? response.json() : null))
+        .then((value: { title?: string } | null) => value?.title ?? "")
+        .catch(() => "");
+      if (needsSearch) {
+        const specialized = await fetch("/api/ai-query", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: lastUser, deep: deepResearch }),
+          signal: stepSignal(15_000),
+        })
+          .then((response) => (response.ok ? response.json() : null))
+          .catch(() => null) as { queries?: string[] } | null;
+        const improved = (specialized?.queries ?? []).filter(Boolean);
+        if (improved.length > 0) {
+          queries = improved;
+          query = improved[0] ?? query;
+        }
+      }
+      title = (await titlePromise) || title;
+
       // 3. Pencarian web nyata via Serper.
       let search: { query?: string; direct?: string; results?: ChatSource[] } | null = null;
       if (needsSearch && query) {
@@ -451,7 +481,7 @@ function AiChatPage() {
           acc.content.length +
           acc.reasoning.length;
         void recordChatUsageFn({
-          data: { tokens: Math.min(50_000, Math.ceil(chars / 4)), title: usedTitle.slice(0, 60) },
+          data: { tokens: Math.min(1_000_000, Math.ceil(chars / 4)), title: usedTitle.slice(0, 60) },
         })
           .then((c) => setCredits({ used: c.used, limit: c.limit, remaining: c.remaining }))
           .catch(() => {});
@@ -549,7 +579,7 @@ function AiChatPage() {
       const r = await generateImageFn({ data: { prompt } });
       const reply: ChatMessage = {
         role: "assistant",
-        content: `Ini gambarnya. Sisa limit hari ini: ${r.remaining}/${r.limit}.`,
+        content: "",
         imageUrl: r.url,
         imagePrompt: r.prompt,
       };
@@ -578,11 +608,15 @@ function AiChatPage() {
     }
 
     const attached = image;
+    const documentContext = document
+      ? `\n\n[Lampiran dokumen: ${document.name}]\n${document.text}`
+      : "";
     const userMsg: ChatMessage = {
       role: "user",
-      content: trimmed || "Tolong analisis gambar ini.",
+      content: `${trimmed || "Tolong analisis lampiran ini."}${documentContext}`,
       ...(attached ? { image: attached } : {}),
     };
+    setDocument(null);
     await run([...messages, userMsg], attached, activeId, threads);
   }
 
@@ -688,7 +722,9 @@ function AiChatPage() {
           {loading && !draft?.content && !draft?.reasoning && (
             <div className="flex gap-2">
               <AiAvatar className="mt-1 size-7" />
-              <ShiningText text={status ?? "Menyiapkan jawaban..."} className="mt-1" />
+              <span key={status ?? "preparing"} className="mt-1 inline-block animate-status-swap">
+                <ShiningText text={status ?? "Menyiapkan jawaban..."} />
+              </span>
             </div>
           )}
 
@@ -717,6 +753,8 @@ function AiChatPage() {
             isLoading={loading || imaging}
             image={image}
             onImageChange={setImage}
+            document={document}
+            onDocumentChange={setDocument}
             onToolChange={setTool}
             plugin={plugin}
             onPluginChange={setPlugin}

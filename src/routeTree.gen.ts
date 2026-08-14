@@ -20,6 +20,7 @@ import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LeaderboardRouteImport } from './routes/leaderboard'
+import { Route as GiveCreditsRouteImport } from './routes/give-credits'
 import { Route as GetVerifiedRouteImport } from './routes/get-verified'
 import { Route as FakeMeRouteImport } from './routes/fake-me'
 import { Route as BroadcastRouteImport } from './routes/broadcast'
@@ -102,6 +103,11 @@ const LoginRoute = LoginRouteImport.update({
 const LeaderboardRoute = LeaderboardRouteImport.update({
   id: '/leaderboard',
   path: '/leaderboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GiveCreditsRoute = GiveCreditsRouteImport.update({
+  id: '/give-credits',
+  path: '/give-credits',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GetVerifiedRoute = GetVerifiedRouteImport.update({
@@ -253,6 +259,7 @@ export interface FileRoutesByFullPath {
   '/broadcast': typeof BroadcastRoute
   '/fake-me': typeof FakeMeRoute
   '/get-verified': typeof GetVerifiedRoute
+  '/give-credits': typeof GiveCreditsRoute
   '/leaderboard': typeof LeaderboardRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
@@ -294,6 +301,7 @@ export interface FileRoutesByTo {
   '/broadcast': typeof BroadcastRoute
   '/fake-me': typeof FakeMeRoute
   '/get-verified': typeof GetVerifiedRoute
+  '/give-credits': typeof GiveCreditsRoute
   '/leaderboard': typeof LeaderboardRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
@@ -336,6 +344,7 @@ export interface FileRoutesById {
   '/broadcast': typeof BroadcastRoute
   '/fake-me': typeof FakeMeRoute
   '/get-verified': typeof GetVerifiedRoute
+  '/give-credits': typeof GiveCreditsRoute
   '/leaderboard': typeof LeaderboardRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
@@ -379,6 +388,7 @@ export interface FileRouteTypes {
     | '/broadcast'
     | '/fake-me'
     | '/get-verified'
+    | '/give-credits'
     | '/leaderboard'
     | '/login'
     | '/profile'
@@ -420,6 +430,7 @@ export interface FileRouteTypes {
     | '/broadcast'
     | '/fake-me'
     | '/get-verified'
+    | '/give-credits'
     | '/leaderboard'
     | '/login'
     | '/profile'
@@ -461,6 +472,7 @@ export interface FileRouteTypes {
     | '/broadcast'
     | '/fake-me'
     | '/get-verified'
+    | '/give-credits'
     | '/leaderboard'
     | '/login'
     | '/profile'
@@ -503,6 +515,7 @@ export interface RootRouteChildren {
   BroadcastRoute: typeof BroadcastRoute
   FakeMeRoute: typeof FakeMeRoute
   GetVerifiedRoute: typeof GetVerifiedRoute
+  GiveCreditsRoute: typeof GiveCreditsRoute
   LeaderboardRoute: typeof LeaderboardRoute
   LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
@@ -614,6 +627,13 @@ declare module '@tanstack/react-router' {
       path: '/leaderboard'
       fullPath: '/leaderboard'
       preLoaderRoute: typeof LeaderboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/give-credits': {
+      id: '/give-credits'
+      path: '/give-credits'
+      fullPath: '/give-credits'
+      preLoaderRoute: typeof GiveCreditsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/get-verified': {
@@ -823,6 +843,7 @@ const rootRouteChildren: RootRouteChildren = {
   BroadcastRoute: BroadcastRoute,
   FakeMeRoute: FakeMeRoute,
   GetVerifiedRoute: GetVerifiedRoute,
+  GiveCreditsRoute: GiveCreditsRoute,
   LeaderboardRoute: LeaderboardRoute,
   LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,

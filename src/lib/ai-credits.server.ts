@@ -64,6 +64,9 @@ type CreditConfig = {
   users?: Record<string, { chatLimit?: number; imageLimit?: number }>;
 };
 
+export type CreditAdminUser = { id: string; user_no: number; name: string; username: string };
+export type CreditAdminDashboard = { users: CreditAdminUser[]; config: CreditConfig };
+
 export async function readCreditConfig(): Promise<CreditConfig> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { data } = await supabaseAdmin.storage.from(BUCKET).download(CONFIG_KEY);
@@ -104,7 +107,10 @@ async function requireAdmin(adminId: string) {
   if (!data) throw new Error("Akses admin diperlukan.");
 }
 
-export async function adminCreditDashboard(adminId: string, query: string) {
+export async function adminCreditDashboard(
+  adminId: string,
+  query: string,
+): Promise<CreditAdminDashboard> {
   await requireAdmin(adminId);
   const { authSupabaseAdmin } = await import("@/integrations/auth-supabase/client.server");
   let request = authSupabaseAdmin
@@ -121,7 +127,7 @@ export async function adminCreditDashboard(adminId: string, query: string) {
   }
   const [{ data: users, error }, config] = await Promise.all([request, readCreditConfig()]);
   if (error) throw new Error(error.message);
-  return { users: users ?? [], config };
+  return { users: (users ?? []) as CreditAdminUser[], config };
 }
 
 export async function adminSetCredits(
