@@ -33,7 +33,9 @@ import { Route as RequestDataRouteImport } from './routes/request_.data'
 import { Route as DataGetVerifiedRouteImport } from './routes/data.get-verified'
 import { Route as AppsIdRouteImport } from './routes/apps.$id'
 import { Route as ApiAiVisionRouteImport } from './routes/api.ai-vision'
+import { Route as ApiAiTitleRouteImport } from './routes/api.ai-title'
 import { Route as ApiAiSearchRouteImport } from './routes/api.ai-search'
+import { Route as ApiAiQueryRouteImport } from './routes/api.ai-query'
 import { Route as ApiAiPlanRouteImport } from './routes/api.ai-plan'
 import { Route as ApiAiChatRouteImport } from './routes/api.ai-chat'
 import { Route as AiProfileRouteImport } from './routes/ai_.profile'
@@ -167,9 +169,19 @@ const ApiAiVisionRoute = ApiAiVisionRouteImport.update({
   path: '/api/ai-vision',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAiTitleRoute = ApiAiTitleRouteImport.update({
+  id: '/api/ai-title',
+  path: '/api/ai-title',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAiSearchRoute = ApiAiSearchRouteImport.update({
   id: '/api/ai-search',
   path: '/api/ai-search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAiQueryRoute = ApiAiQueryRouteImport.update({
+  id: '/api/ai-query',
+  path: '/api/ai-query',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAiPlanRoute = ApiAiPlanRouteImport.update({
@@ -256,7 +268,9 @@ export interface FileRoutesByFullPath {
   '/ai/profile': typeof AiProfileRoute
   '/api/ai-chat': typeof ApiAiChatRoute
   '/api/ai-plan': typeof ApiAiPlanRoute
+  '/api/ai-query': typeof ApiAiQueryRoute
   '/api/ai-search': typeof ApiAiSearchRoute
+  '/api/ai-title': typeof ApiAiTitleRoute
   '/api/ai-vision': typeof ApiAiVisionRoute
   '/apps/$id': typeof AppsIdRoute
   '/data/get-verified': typeof DataGetVerifiedRoute
@@ -295,7 +309,9 @@ export interface FileRoutesByTo {
   '/ai/profile': typeof AiProfileRoute
   '/api/ai-chat': typeof ApiAiChatRoute
   '/api/ai-plan': typeof ApiAiPlanRoute
+  '/api/ai-query': typeof ApiAiQueryRoute
   '/api/ai-search': typeof ApiAiSearchRoute
+  '/api/ai-title': typeof ApiAiTitleRoute
   '/api/ai-vision': typeof ApiAiVisionRoute
   '/apps/$id': typeof AppsIdRoute
   '/data/get-verified': typeof DataGetVerifiedRoute
@@ -335,7 +351,9 @@ export interface FileRoutesById {
   '/ai_/profile': typeof AiProfileRoute
   '/api/ai-chat': typeof ApiAiChatRoute
   '/api/ai-plan': typeof ApiAiPlanRoute
+  '/api/ai-query': typeof ApiAiQueryRoute
   '/api/ai-search': typeof ApiAiSearchRoute
+  '/api/ai-title': typeof ApiAiTitleRoute
   '/api/ai-vision': typeof ApiAiVisionRoute
   '/apps/$id': typeof AppsIdRoute
   '/data/get-verified': typeof DataGetVerifiedRoute
@@ -376,7 +394,9 @@ export interface FileRouteTypes {
     | '/ai/profile'
     | '/api/ai-chat'
     | '/api/ai-plan'
+    | '/api/ai-query'
     | '/api/ai-search'
+    | '/api/ai-title'
     | '/api/ai-vision'
     | '/apps/$id'
     | '/data/get-verified'
@@ -415,7 +435,9 @@ export interface FileRouteTypes {
     | '/ai/profile'
     | '/api/ai-chat'
     | '/api/ai-plan'
+    | '/api/ai-query'
     | '/api/ai-search'
+    | '/api/ai-title'
     | '/api/ai-vision'
     | '/apps/$id'
     | '/data/get-verified'
@@ -454,7 +476,9 @@ export interface FileRouteTypes {
     | '/ai_/profile'
     | '/api/ai-chat'
     | '/api/ai-plan'
+    | '/api/ai-query'
     | '/api/ai-search'
+    | '/api/ai-title'
     | '/api/ai-vision'
     | '/apps/$id'
     | '/data/get-verified'
@@ -494,7 +518,9 @@ export interface RootRouteChildren {
   AiProfileRoute: typeof AiProfileRoute
   ApiAiChatRoute: typeof ApiAiChatRoute
   ApiAiPlanRoute: typeof ApiAiPlanRoute
+  ApiAiQueryRoute: typeof ApiAiQueryRoute
   ApiAiSearchRoute: typeof ApiAiSearchRoute
+  ApiAiTitleRoute: typeof ApiAiTitleRoute
   ApiAiVisionRoute: typeof ApiAiVisionRoute
   AppsIdRoute: typeof AppsIdRoute
   DataGetVerifiedRoute: typeof DataGetVerifiedRoute
@@ -681,11 +707,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAiVisionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/ai-title': {
+      id: '/api/ai-title'
+      path: '/api/ai-title'
+      fullPath: '/api/ai-title'
+      preLoaderRoute: typeof ApiAiTitleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/ai-search': {
       id: '/api/ai-search'
       path: '/api/ai-search'
       fullPath: '/api/ai-search'
       preLoaderRoute: typeof ApiAiSearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/ai-query': {
+      id: '/api/ai-query'
+      path: '/api/ai-query'
+      fullPath: '/api/ai-query'
+      preLoaderRoute: typeof ApiAiQueryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/ai-plan': {
@@ -798,7 +838,9 @@ const rootRouteChildren: RootRouteChildren = {
   AiProfileRoute: AiProfileRoute,
   ApiAiChatRoute: ApiAiChatRoute,
   ApiAiPlanRoute: ApiAiPlanRoute,
+  ApiAiQueryRoute: ApiAiQueryRoute,
   ApiAiSearchRoute: ApiAiSearchRoute,
+  ApiAiTitleRoute: ApiAiTitleRoute,
   ApiAiVisionRoute: ApiAiVisionRoute,
   AppsIdRoute: AppsIdRoute,
   DataGetVerifiedRoute: DataGetVerifiedRoute,

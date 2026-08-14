@@ -93,6 +93,56 @@ export async function limitsFor(userId: string) {
   };
 }
 
+async function requireAdmin(adminId: string) {
+  const { authSupabaseAdmin } = await import("@/integrations/auth-supabase/client.server");
+  const { data } = await authSupabaseAdmin
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", adminId)
+    .eq("role", "admin")
+    .maybeSingle();
+  if (!data) throw new Error("Akses admin diperlukan.");
+}
+
+export async function adminCreditDashboard(adminId: string, query: string) {
+  await requireAdmin(adminId);
+  const { authSupabaseAdmin } = await import("@/integrations/auth-supabase/client.server");
+  let request = authSupabaseAdmin
+    .from("profiles")
+    .select("id,user_no,name,username")
+    .order("user_no", { ascending: true })
+    .limit(30);
+  const q = query.trim();
+  if (q) {
+    const numeric = /^\d+$/.test(q);
+    request = numeric
+      ? request.eq("user_no", Number(q))
+      : request.or(`name.ilike.%${q.replace(/[%_,]/g, "")}%,username.ilike.%${q.replace(/[%_,]/g, "")}%`);
+  }
+  const [{ data: users, error }, config] = await Promise.all([request, readCreditConfig()]);
+  if (error) throw new Error(error.message);
+  return { users: users ?? [], config };
+}
+
+export async function adminSetCredits(
+  adminId: string,
+  input: { targetUserId?: string; chatLimit: number; imageLimit: number },
+) {
+  await requireAdmin(adminId);
+  const config = await readCreditConfig();
+  if (input.targetUserId) {
+    config.users = {
+      ...(config.users ?? {}),
+      [input.targetUserId]: { chatLimit: input.chatLimit, imageLimit: input.imageLimit },
+    };
+  } else {
+    config.globalChatLimit = input.chatLimit;
+    config.globalImageLimit = input.imageLimit;
+  }
+  await writeCreditConfig(config);
+  return config;
+}
+
 async function writeCredits(userId: string, c: Credits): Promise<void> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const body = new Blob([JSON.stringify(c)], { type: "application/json" });
