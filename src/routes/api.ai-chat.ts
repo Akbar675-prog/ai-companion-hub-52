@@ -43,13 +43,19 @@ export const Route = createFileRoute("/api/ai-chat")({
           return Response.json({ error: "Body tidak valid." }, { status: 400 });
         }
 
-        const messages = (body.messages ?? [])
-          .slice(-30)
-          .map((m) => ({
+        const rawMessages = (body.messages ?? []).slice(-60);
+        let remainingChars = 4_000_000;
+        const messages = rawMessages
+          .reverse()
+          .map((m) => {
+            const content = String(m.content ?? "").slice(0, remainingChars);
+            remainingChars -= content.length;
+            return {
             role: m.role === "assistant" ? "assistant" : "user",
-            content: String(m.content ?? "").slice(0, 8000),
-          }))
-          .filter((m) => m.content.length > 0);
+            content,
+          };})
+          .filter((m) => m.content.length > 0)
+          .reverse();
 
         if (messages.length === 0) {
           return Response.json({ error: "Pesan tidak boleh kosong." }, { status: 400 });
