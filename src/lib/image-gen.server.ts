@@ -5,6 +5,7 @@
 // tengah malam UTC karena kunci kuota memakai tanggal UTC.
 
 import { USER_CONTENT_ORIGIN } from "./user-content";
+import { limitsFor } from "./ai-credits.server";
 
 const BUCKET = "app-metadata";
 export const DAILY_IMAGE_LIMIT = 5;
@@ -58,6 +59,7 @@ async function writeQuota(userId: string, quota: Quota): Promise<void> {
 
 export async function imageQuotaFor(userId: string) {
   const q = await readQuota(userId);
+  const limit = (await limitsFor(userId)).image;
   const history = q.history ?? {};
   const today = todayUtc();
   const now = new Date(`${today}T00:00:00Z`);
@@ -68,8 +70,8 @@ export async function imageQuotaFor(userId: string) {
   }
   return {
     used: q.used,
-    limit: DAILY_IMAGE_LIMIT,
-    remaining: Math.max(0, DAILY_IMAGE_LIMIT - q.used),
+    limit,
+    remaining: Math.max(0, limit - q.used),
     series,
   };
 }
@@ -177,9 +179,10 @@ async function fetchImageBytes(targets: string[]): Promise<{ bytes: ArrayBuffer;
 
 export async function generateImage(userId: string, prompt: string) {
   const quota = await readQuota(userId);
-  if (quota.used >= DAILY_IMAGE_LIMIT) {
+  const limit = (await limitsFor(userId)).image;
+  if (quota.used >= limit) {
     throw new Error(
-      `Limit membuat gambar hari ini sudah habis (${DAILY_IMAGE_LIMIT}/hari). Coba lagi setelah pukul 07:00 WIB.`,
+      `Limit membuat gambar hari ini sudah habis (${limit}/hari). Coba lagi setelah pukul 07:00 WIB.`,
     );
   }
 
@@ -215,8 +218,8 @@ export async function generateImage(userId: string, prompt: string) {
     ext,
     prompt: clean,
     used: quota.used + 1,
-    limit: DAILY_IMAGE_LIMIT,
-    remaining: Math.max(0, DAILY_IMAGE_LIMIT - (quota.used + 1)),
+    limit,
+    remaining: Math.max(0, limit - (quota.used + 1)),
   };
 }
 

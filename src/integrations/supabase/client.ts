@@ -30,8 +30,8 @@ function createSupabaseFetch(supabaseKey: string): typeof fetch {
 function createSupabaseClient() {
   // Use import.meta.env for client-side (Vite build-time replacement)
   // Fall back to process.env for SSR (server-side rendering)
-  const SUPABASE_URL = import.meta.env['VITE_SUPABASE_URL'] || process.env['SUPABASE_URL'] || process.env['MAIN_SUPABASE_URL'] || 'https://dbgoikwdeaxpddcukzgg.supabase.co';
-  const SUPABASE_PUBLISHABLE_KEY = import.meta.env['VITE_SUPABASE_PUBLISHABLE_KEY'] || process.env['SUPABASE_PUBLISHABLE_KEY'] || process.env['MAIN_SUPABASE_PUBLISHABLE_KEY'] || 'sb_publishable_alPG0fAlefQr-12xJFdRhQ_medvjgu4';
+  const SUPABASE_URL = import.meta.env['VITE_SUPABASE_URL'] || process.env['SUPABASE_URL'] || process.env['DATA_SUPABASE_URL'] || process.env['MAIN_SUPABASE_URL'] || 'https://dbgoikwdeaxpddcukzgg.supabase.co';
+  const SUPABASE_PUBLISHABLE_KEY = import.meta.env['VITE_SUPABASE_PUBLISHABLE_KEY'] || process.env['SUPABASE_PUBLISHABLE_KEY'] || process.env['DATA_SUPABASE_PUBLISHABLE_KEY'] || process.env['MAIN_SUPABASE_PUBLISHABLE_KEY'] || 'sb_publishable_alPG0fAlefQr-12xJFdRhQ_medvjgu4';
 
   if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
     const missing = [

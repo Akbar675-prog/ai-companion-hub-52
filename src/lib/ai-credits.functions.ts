@@ -23,7 +23,7 @@ export const recordChatUsageFn = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) =>
     z
       .object({
-        tokens: z.number().int().min(0).max(50_000),
+        tokens: z.number().int().min(0).max(1_000_000),
         title: z.string().trim().max(60),
       })
       .parse(d),

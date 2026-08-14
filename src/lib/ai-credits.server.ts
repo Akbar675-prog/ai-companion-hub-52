@@ -4,6 +4,7 @@
 
 const BUCKET = "app-metadata";
 export const DAILY_CHAT_TOKENS = 100_000;
+const CONFIG_KEY = "ai-credits/config.json";
 
 export type UsagePoint = { date: string; used: number };
 export type ThreadUsage = { title: string; tokens: number };
@@ -57,6 +58,41 @@ async function readCredits(userId: string): Promise<Credits> {
   }
 }
 
+type CreditConfig = {
+  globalChatLimit?: number;
+  globalImageLimit?: number;
+  users?: Record<string, { chatLimit?: number; imageLimit?: number }>;
+};
+
+export async function readCreditConfig(): Promise<CreditConfig> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data } = await supabaseAdmin.storage.from(BUCKET).download(CONFIG_KEY);
+  if (!data) return {};
+  try {
+    return JSON.parse(await data.text()) as CreditConfig;
+  } catch {
+    return {};
+  }
+}
+
+export async function writeCreditConfig(config: CreditConfig): Promise<void> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  await supabaseAdmin.storage.from(BUCKET).upload(
+    CONFIG_KEY,
+    new Blob([JSON.stringify(config)], { type: "application/json" }),
+    { contentType: "application/json", upsert: true },
+  );
+}
+
+export async function limitsFor(userId: string) {
+  const config = await readCreditConfig();
+  const own = config.users?.[userId];
+  return {
+    chat: Math.max(0, own?.chatLimit ?? config.globalChatLimit ?? DAILY_CHAT_TOKENS),
+    image: Math.max(0, own?.imageLimit ?? config.globalImageLimit ?? 5),
+  };
+}
+
 async function writeCredits(userId: string, c: Credits): Promise<void> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const body = new Blob([JSON.stringify(c)], { type: "application/json" });
@@ -78,13 +114,14 @@ function toSeries(history: Record<string, number>, today: string, todayUsed: num
 
 export async function chatCreditsFor(userId: string) {
   const c = await readCredits(userId);
+  const limit = (await limitsFor(userId)).chat;
   const threads: ThreadUsage[] = Object.entries(c.threads)
     .map(([title, tokens]) => ({ title, tokens }))
     .sort((a, b) => b.tokens - a.tokens);
   return {
     used: c.used,
-    limit: DAILY_CHAT_TOKENS,
-    remaining: Math.max(0, DAILY_CHAT_TOKENS - c.used),
+    limit,
+    remaining: Math.max(0, limit - c.used),
     threads,
     series: toSeries(c.history, c.day, c.used),
   };
@@ -93,14 +130,15 @@ export async function chatCreditsFor(userId: string) {
 /** Catat pemakaian token chat untuk satu percakapan. */
 export async function recordChatUsage(userId: string, tokens: number, title: string) {
   const c = await readCredits(userId);
-  const t = Math.max(0, Math.min(50_000, Math.round(tokens) || 0));
+  const limit = (await limitsFor(userId)).chat;
+  const t = Math.max(0, Math.min(1_000_000, Math.round(tokens) || 0));
   const key = (title || "Chat baru").slice(0, 60);
   c.used += t;
   c.threads[key] = (c.threads[key] ?? 0) + t;
   await writeCredits(userId, c);
   return {
     used: c.used,
-    limit: DAILY_CHAT_TOKENS,
-    remaining: Math.max(0, DAILY_CHAT_TOKENS - c.used),
+    limit,
+    remaining: Math.max(0, limit - c.used),
   };
 }
