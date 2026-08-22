@@ -33,7 +33,7 @@ export type AppListItem = {
   Play_link?: string | null;
   Size_label?: string | null;
   Banner_url?: string | null;
-  package_name?; string | null;
+  Package_name?; string | null;
   Previews?: PreviewItem[]; // list of preview media (image or video)
 };
 
